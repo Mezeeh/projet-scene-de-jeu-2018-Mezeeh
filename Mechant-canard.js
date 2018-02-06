@@ -4,7 +4,7 @@ function MechantCanard(dessin){
 	var estCharge = false;
 	
 	function initialiser(){
-		imageMechantCanard.src = "sprite-mechant-canard-volant.png";
+		imageMechantCanard.src = "sprites/sprite-mechant-canard-volant.png";
 		imageMechantCanard.onload = noterFinChargement;
 	}
 	
