@@ -1,19 +1,36 @@
-function Canard(dessin, scene){
-	var imageCanard = new Image();
+function Canard(scene, jeu){
+	var imageCanard;
 	var canard = this;
-	var estCharge = false;
+	this.estCharge = false;
+	var animationCanardVole;
 	
 	function initialiser(){
-		imageCanard.src = "sprites/sprite-canard-volant.png";
-		imageCanard.onload = noterFinChargement;
+		imageCanard = new Image();
+		imageCanard.src = "decoration/sprites/sprite-canard-volant.png";
+		imageCanard.onload = terminerChargement;
 	}
 	
-	function noterFinChargement(){
-        canard.estCharge = true;
+	function terminerChargement(){
+        
+		var spriteCanardVolant = new createjs.SpriteSheet(
+		{
+			images:[imageCanard],
+			frames:{width:331, height:307},
+			framerate: 8,
+			animations:
+			{
+				vole:[0,1,2,3,4,5,6,7]
+			}
+		});
+		canard.estCharge = true;
+		animationCanardVole = new createjs.Sprite(spriteCanardVolant, "vole");
+	
+		//animationCanardVole.on("click", jeu.arme.tirer());
     }
-    
+	
+
     this.afficher = function(){
-        dessin.drawImage(imageCanard, 0, 0);
+        scene.addChild(animationCanardVole);
     }
 	
 	this.bougerAleatoire = function(){
@@ -21,21 +38,9 @@ function Canard(dessin, scene){
 	}
 	
 	this.exploser = function(){
-		// TODO : Faire exploser ou coucher la Canard lorsqu'elle est se fait toucher
+		// TODO : animer une mort
+		scene.removeChild(animationCanardVole);
 	}
-	
-	var spriteCanardVolant = new createjs.SpriteSheet(
-		{
-			images:[imageCanard],
-			frames:{width:331, height:307},
-			animations:
-			{
-				vole:[0,1,2,3,4,5,6,7]
-			}
-		}
-	)
-	
-	var animationCanardVole = new createjs.Sprite(spriteCanardVolant, "vole");
     
     initialiser();
 }

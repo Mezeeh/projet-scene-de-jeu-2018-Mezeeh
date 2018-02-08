@@ -18,6 +18,7 @@ function Arme(dessin){
 	
 	this.tirer = function(){
 		// TODO : Faire tirer et si plus de balle faire recharger
+		console.log("toto");
 	}
 	
 	this.recharger = function(){
