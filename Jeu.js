@@ -3,6 +3,7 @@
     var scene = new createjs.Stage(dessin);
 	createjs.Ticker.addEventListener("tick", rafraichirJeu);
 	//createjs.Ticker.setInterval(25);
+<<<<<<< HEAD
 	createjs.Ticker.setFPS(25);
 	var arme = new Arme(dessin);
 	var canard = new Canard(scene, canardCible);
@@ -31,6 +32,17 @@
 		position.y = evenement.stageY;
 		
 		mire.deplacer(position);
+=======
+	createjs.Ticker.setFPS(5);
+	//var arme = new Arme(dessin);
+	var canard = new Canard(scene);
+	//var mechantCanard = new MechantCanard(dessin);
+		
+	
+	
+	function rafraichirJeu(evenement){
+		scene.update(evenement);
+>>>>>>> f7d756336dfa4da8fb3fc3b92d4cd2e6265b3b56
 	}
 
     interval = setInterval(
