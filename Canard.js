@@ -1,8 +1,9 @@
 function Canard(scene){
 	var imageCanard;
 	var canard = this;
-	this.estCharge = false;
+	var charge = false;
 	var animationCanardVole;
+	var bitMapCanard = null;
 	
 	function initialiser(){
 		imageCanard = new Image();
@@ -22,25 +23,54 @@ function Canard(scene){
 				vole:[0,1,2,3,4,5,6,7]
 			}
 		});
-		canard.estCharge = true;
+		charge = true;
 		animationCanardVole = new createjs.Sprite(spriteCanardVolant, "vole");
 	
 		//animationCanardVole.on("click", jeu.arme.tirer());
     }
 	
+	this.mettreEnPerspectiveCanard = function() {	
+		animationCanardVole.scaleX = animationCanardVole.scaleY = 0.5;
+
+	}
+
+	this.getPerspective = function(){
+		return animationCanardVole.scaleX;
+	}
 
     this.afficher = function(){
-        scene.addChild(animationCanardVole);
+		scene.addChild(animationCanardVole);
+		//this.mettreEnPerspectiveCanard();
     }
 	
-	this.bougerAleatoire = function(){
-		// TODO : Faire bouger la/les Canard(s) d'une manier random dans une zone donnee
+	this.bouger = function(distance){
+		// TODO : Faire bouger le/les Canard(s) d'une manier random dans une zone donnee
+		animationCanardVole.x += distance;
 	}
 	
 	this.exploser = function(){
 		// TODO : animer une mort
 		scene.removeChild(animationCanardVole);
 	}
-    
+	
+	this.setPosition = function(position){
+		animationCanardVole.x = position.x;
+		animationCanardVole.y = position.y;
+		animationCanardVole.scaleX = animationCanardVole.scaleY = position.z;
+	}
+
+	this.getPosition = function(){
+		var position = { x: animationCanardVole.x, y: animationCanardVole.y, z: animationCanardVole.scaleX};
+		return position;
+	}
+
+	this.estCharge = function(){
+		return charge;
+	}
+
+	this.disparaitre = function(){
+		scene.removeChild(animationCanardVole);
+	}
+
     initialiser();
 }

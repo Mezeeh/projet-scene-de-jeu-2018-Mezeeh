@@ -2,7 +2,7 @@ function Mire(scene){
 	var imageMire = new Image();
 	var mire = this;		
 	var bitmapMire = null;
-	var scale = 0.35;
+	var scale = 0.25;
 	var offset = {x : (177 * scale), y : (180 * scale)};
 	
 	this.estCharge = false;
