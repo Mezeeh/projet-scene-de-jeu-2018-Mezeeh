@@ -1,5 +1,7 @@
 (function () {
 	var TOUCHE_ESPACE = 32;
+	var TEMPS_ENTRE_CHAQUE_TIRS = 1000;
+	var TEMPS_POUR_RECHARGER = 3000;
 
 	var dessin;
 	var scene;
@@ -13,8 +15,7 @@
 	var positionMire;
 	var estPretATirer;
 	var estEnRecharge;
-	var tempsEntreChaqueTirs;
-	var tempsRecharger;
+	var balle;
 
 	var ratioScene = { largeur: 1, hauteur: 1 };
 	var dimentionScene = { largeur: 1, hauteur: 1 };
@@ -23,7 +24,8 @@
 		dessin = document.getElementById("dessin");
 		scene = new createjs.Stage(dessin);
 		createjs.Ticker.setFPS(25);
-		varme = new Arme(scene);
+		balle = new Balle(scene);
+		arme = new Arme(scene);
 		mire = new Mire(scene);
 		canardListe = [];
 		deplacementCanardListe = [];
@@ -36,19 +38,10 @@
 		positionMire = { x: 0, y: 0 };
 		estPretATirer = true;
 		estEnRecharge = false;
-		tempsEntreChaqueTirs = 1000;
-		tempsRecharger = 3000;
-	}
-
-	function canardCible(positionCible) {
-		arme.tirer(positionCible);
 	}
 
 	function trierParProfondeur(){
-		/* var canardListeTrier = [];
-		for(i = 0; i < nombreCanards; i++){
-			
-		} */
+		// TODO : Trier les canards sur la scene selon leur scale
 	}
 
 	function initialiserPositionCanard(canard){
@@ -56,7 +49,6 @@
 		positionCanard.x = -300;
 		positionCanard.y = (Math.random() * 300) + 0;
 		positionCanard.z = (Math.random() * 0.5) + 0.1;
-		console.log(positionCanard.z);
 		canard.setPosition(positionCanard);
 	}
 
@@ -72,26 +64,24 @@
 			if(canardListe[i].getPosition().x > scene.canvas.width)
 				initialiserPositionCanard(canardListe[i]);
 		}
-
-		/* canard2.bouger(deplacementCanard2); */
-		/* if(canard.getPosition().x > scene.canvas.width)
-			initialiserPositionCanard(canard);
-		if(canard2.getPosition().x > scene.canvas.width)
-			initialiserPositionCanard(canard2); */
 		scene.update(evenement);
 	}
 
 	function tirer(evenement) {
 		cible.x = evenement.stageX;
 		cible.y = evenement.stageY;
-		console.log("cible x : " + cible.x + " cible y : " + cible.y + " evenement : " + evenement.type + " target : " + evenement.target);
+		
 		if (estPretATirer) {
 			estPretATirer = false;
-			arme.tirer();
+			//arme.tirer(cible);
+			balle.afficher();
+			balle.tirer(cible);
+		
 			setTimeout(function () {
 				estPretATirer = true;
-			}, tempsEntreChaqueTirs);
+			}, TEMPS_ENTRE_CHAQUE_TIRS);
 		}
+		scene.update();
 	}
 
 	function deplacerMire(evenement) {
@@ -101,36 +91,15 @@
 		mire.deplacer(positionMire);
 	}
 
-	var initialiserCanevas = function () {
-		//On redimensionne le canvas en respectant l'aspect ratio
-		//On vise à remplir l'écran en largeur sans déborder en hauteur
-		//On centre le résultat au milieu de l'écran pour renforcir l'aspect focal du jeu.
-		ratioLargeur = window.innerWidth / dessin.width;
-		ratioHauteur = window.innerHeight / dessin.height;
-		if (ratioLargeur * dessin.height <= window.innerHeight) {
-			dessin.style.width = "100%";
-			dessin.style.marginLeft = "-" + (dessin.width * ratioHauteur) / 2 + "px";
-			dessin.style.left = (dessin.width * ratioHauteur) / 2 + "px";
-			computedStyle = window.getComputedStyle(dessin);
-			dessinNouvelleHeight = parseInt(computedStyle.getPropertyValue('height').replace("px", ""));
-			dessin.style.marginTop = (window.innerHeight - dessinNouvelleHeight) / 2 + "px";
-		}
-		else {
-			dessin.style.width = (dessin.width * ratioHauteur) + "px";
-			dessin.style.marginLeft = "-" + (dessin.width * ratioHauteur) / 2 + "px";
-		}
-		var body = document.getElementsByTagName("body")[0];
-		body.style.maxHeight = window.innerHeight + "px";
-		body.style.overflow = "hidden";
+	function deplacerArme(evenement){
+		var angle = Math.atan2(scene.mouseY - arme.getPosition().y, scene.mouseX - arme.getPosition().x);
+		angle *= (180 / Math.PI);
+		arme.tourner(angle);
+	}
 
-		computedStyle = window.getComputedStyle(dessin);
-		dessinNouvelleHeight = parseInt(computedStyle.getPropertyValue('height').replace("px", ""));
-		dessinNouvelleWidth = parseInt(computedStyle.getPropertyValue('width').replace("px", ""));
-		ratioScene.largeur = dessinNouvelleWidth / dessin.width;
-		ratioScene.hauteur = dessinNouvelleHeight / dessin.height;
-
-		dimentionScene.largeur = dessin.width;
-		dimentionScene.hauteur = dessin.height;
+	function pointer(evenement){
+		deplacerMire(evenement);
+		deplacerArme(evenement);
 	}
 
 	interval = setInterval(
@@ -144,10 +113,10 @@
 			}
 			if (nbCanardCharge == nombreCanards/*&& arme.estCharge && mechantCanard.estCharge*/) {
 				//initialiserCanevas();
-				//arme.afficher();
+				arme.afficher();
 				//mechantCanard.afficher();
 				scene.on("stagemousedown", tirer);
-				scene.on("stagemousemove", deplacerMire);
+				scene.on("stagemousemove", pointer);
 				document.onkeydown = gererCommandeClavier;
 				createjs.Ticker.addEventListener("tick", rafraichirJeu);
 
@@ -155,11 +124,6 @@
 					faireApparaitreCanard(canardListe[i]);
 					initialiserPositionCanard(canardListe[i]);
 				}
-
-				/* faireApparaitreCanard(canard);
-				faireApparaitreCanard(canard2);
-				initialiserPositionCanard(canard);
-				initialiserPositionCanard(canard2); */
 				mire.afficher();
 				clearInterval(interval);
 			}
@@ -174,7 +138,7 @@
 					arme.recharger();
 					setTimeout(function () {
 						estEnRecharge = false;
-					}, tempsRecharger);
+					}, TEMPS_POUR_RECHARGER);
 				}
 				break;
 
@@ -184,6 +148,5 @@
 		}
 	}
 
-	//animationCanardVole.play();
 	initialiser();
 })();
