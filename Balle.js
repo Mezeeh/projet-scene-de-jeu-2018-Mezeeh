@@ -33,20 +33,21 @@ function Balle(scene) {
     }
 
     this.effacer = function () {
-        /* etatCourant = Etat.enCollision;*/
         balleForme.x = scene.canvas.width / 2;
         balleForme.y = scene.canvas.height - 10;
         scene.removeChild(balleForme);
         etatCourant = Etat.enAttente;
     }
 
-    this.getEtatCourant = function () {
-        return etatCourant;
+    this.estEnMouvement = function () {
+        return etatCourant == Etat.enMouvement;
     }
 
     this.tirer = function (cible) {
         if (etatCourant == Etat.enAttente) {
-            console.log("Je tire !");
+            balleForme.x = scene.canvas.width / 2;
+            balleForme.y = scene.canvas.height - 10;
+
             // Calcul l'equation de la droite pour que la balle ne s'arrete pas ou le clic droit est fait a l'ecran
             var pente = ((cible.y - balleForme.y) / (cible.x - balleForme.x));
             var b = cible.y - (pente * cible.x);
@@ -56,7 +57,15 @@ function Balle(scene) {
 
             // Calcul le temps (la distance) que ca devrait prendre pour se rendre au point selon ca distance
             var vitesse = Math.sqrt(Math.pow(balleForme.x - equation.x, 2) + Math.pow(balleForme.y - equation.y, 2));
-            createjs.Tween.get(balleForme).to({ x: equation.x, y: equation.y }, vitesse / 2);
+            createjs.Tween.get(balleForme).to({ x: equation.x, y: equation.y }, vitesse / 2).call(function(){
+                if (balleForme.x > (scene.canvas.width + 10) || balleForme.x < -10 || balleForme.y > (scene.canvas.height + 10) || balleForme.y < -10)
+                {
+                    balleForme.x = scene.canvas.width / 2;
+                    balleForme.y = scene.canvas.height - 10;
+                    scene.removeChild(balleForme);
+                    etatCourant = Etat.enAttente;
+                }
+            });
         }
         etatCourant = Etat.enMouvement;
     }
