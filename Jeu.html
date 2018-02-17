@@ -5,26 +5,9 @@
 	<meta charset="utf-8">
 	<title></title>
 	<style>
-		#dessin {
-			border: solid 1px #dddddd;
-			cursor: none;
-			position: absolute;
-			display: block;
-			padding: 0;
-			z-index: 990;
-
-		}
-
-		#hud {
-			position: absolute;
-			z-index: 999;
-			background-color: aqua;
-			border: solid 5px yellow;
-		}
-
 		canvas {
+			cursor: none;
 			padding: 0;
-			margin: auto;
 			display: block;
 			width: 1280px;
 			height: 720px;
@@ -33,15 +16,43 @@
 			bottom: 0;
 			left: 0;
 			right: 0;
+			z-index: 990;
+			background-color: #dddddd;
 		}
 
 		body {
 			background-image: url("decoration/illustration/cadre.jpg");
 		}
 
-		#hudBalles{
+		#hudBalles {
 			font-size: 32px;
 			color: blue;
+			padding: 0;
+			margin: auto;
+			display: block;
+			width: 100px;
+			height: 32px;
+			position:absolute;
+			bottom: 0;
+			right: 0;
+			z-index: 999;
+		}
+
+		#hudPoints {
+			font-size: 32px;
+			color: blue;
+			padding: 0;
+			margin: auto;
+			display: block;
+			width: auto;
+			height: 32px;
+			position:absolute;
+			bottom: 0;
+			left: 0;
+			z-index: 999;
+		}
+
+		#espace-jeu{
 			padding: 0;
 			margin: auto;
 			display: block;
@@ -52,14 +63,18 @@
 			bottom: 0;
 			left: 0;
 			right: 0;
+			z-index: 990;
 		}
 	</style>
 </head>
 
 <body>
-	<div id="hudBalles"></div>
 	<!--<dvi id="hud" width="1280" height="720">BLABAB</dvi>>-->
-	<canvas id="dessin" width="1280" height="720"></canvas>
+	<div id="espace-jeu">
+		<canvas id="dessin" width="1280" height="720"></canvas>
+		<div id="hudBalles"></div>
+		<div id="hudPoints"></div>
+	</div>
 
 	<script src="ArrierePlan.js"></script>
 

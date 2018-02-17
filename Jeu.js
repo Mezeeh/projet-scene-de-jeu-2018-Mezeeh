@@ -16,6 +16,7 @@
 	var estPretATirer;
 	var estEnRecharge;
 	var balle;
+	var pointage;
 
 	var ratioScene = { largeur: 1, hauteur: 1 };
 	var dimentionScene = { largeur: 1, hauteur: 1 };
@@ -27,6 +28,7 @@
 		mire = new Mire(scene);
 		arme = new Arme(scene);
 		balle = new Balle(scene);
+		pointage = 0;
 		canardListe = [];
 		deplacementCanardListe = [];
 
@@ -87,6 +89,7 @@
 
 	function rafraichirJeu(evenement) {
 		document.getElementById("hudBalles").innerHTML = arme.getNbBallesActuel() > 1 ? arme.getNbBallesActuel() + " balles" : arme.getNbBallesActuel() + " balle";
+		document.getElementById("hudPoints").innerHTML = pointage > 1 ? "Points : " + pointage : "Point : " + pointage; 
 
 		for (i = 0; i < nombreCanards; i++) {
 			deplacementCanardListe[i] = evenement.delta / 1000 * 600 * (canardListe[i].getPerspective() * 1.5);
@@ -97,6 +100,7 @@
 			// TODO : Faire une bien meilleur detection
 			if(balle.estEnMouvement()){
 				if (balle.representationRectangle().intersects(canardListe[i].representationRectangle())){
+					pointage++;
 					balle.effacer();
 					canardListe[i].mourir();
 				}	
