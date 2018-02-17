@@ -2,6 +2,7 @@
 	var TOUCHE_ESPACE = 32;
 	var TEMPS_ENTRE_CHAQUE_TIRS = 1000;
 	var TEMPS_POUR_RECHARGER = 3000;
+	var TEMPS_DE_JEU = 60000;
 
 	var dessin;
 	var scene;
@@ -17,6 +18,9 @@
 	var estEnRecharge;
 	var balle;
 	var pointage;
+	var nbBallesTirees;
+	var partieTerminee;
+	var gagne;
 
 	var ratioScene = { largeur: 1, hauteur: 1 };
 	var dimentionScene = { largeur: 1, hauteur: 1 };
@@ -29,6 +33,9 @@
 		arme = new Arme(scene);
 		balle = new Balle(scene);
 		pointage = 0;
+		nbBallesTirees = 0;
+		partieTerminee = false;
+		gagne = null;
 		canardListe = [];
 		deplacementCanardListe = [];
 
@@ -69,6 +76,13 @@
 	
 			}, 1);
 			
+			setTimeout(function(){
+				partieTerminee = true;
+
+				gagne = pointage >= (TEMPS_DE_JEU / 1000) * 40 / 100;
+
+				alert("Victorieux : " + gagne + "\nPointage : " + pointage);
+			}, TEMPS_DE_JEU);
 	}
 
 	function trierParProfondeur() {
@@ -121,6 +135,7 @@
 					if(arme.getNbBallesActuel() > 0){
 						arme.tirer();
 						balle.tirer(cible);
+						nbBallesTirees++;
 						setTimeout(function(){
 							balle.afficher();
 						}, 75);
