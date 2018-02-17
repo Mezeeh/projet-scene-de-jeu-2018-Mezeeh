@@ -86,6 +86,8 @@
 	}
 
 	function rafraichirJeu(evenement) {
+		document.getElementById("hudBalles").innerHTML = arme.getNbBallesActuel() > 1 ? arme.getNbBallesActuel() + " balles" : arme.getNbBallesActuel() + " balle";
+
 		for (i = 0; i < nombreCanards; i++) {
 			deplacementCanardListe[i] = evenement.delta / 1000 * 600 * (canardListe[i].getPerspective() * 1.5);
 			canardListe[i].bouger(deplacementCanardListe[i]);
