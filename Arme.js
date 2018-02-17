@@ -4,8 +4,8 @@ function Arme(scene){
 	var imageArme;
 	var bitmapArme;
 	var arme = this;
-	var estCharge = false;
-	var nbBalleActuel = 5;
+	var charge = false;
+	var nbBallesActuel = 5;
 	var scale = 0.35;
 	
 	function initialiser(){
@@ -13,12 +13,16 @@ function Arme(scene){
 		imageArme.src = "decoration/illustration/modele-arme.png";
 		bitmapArme = new createjs.Bitmap(imageArme);
 		bitmapArme.scaleX = bitmapArme.scaleY = scale;
-		bitmapArme.onload = noterFinChargement;
+		imageArme.onload = noterFinChargement;
 	}
 	
 	function noterFinChargement(){
-        arme.estCharge = true;
-    }
+        charge = true;
+	}
+	
+	this.estCharge = function(){
+		return charge;
+	}
     
     this.afficher = function(){
 		scene.addChild(bitmapArme);
@@ -29,17 +33,13 @@ function Arme(scene){
 		bitmapArme.x = (scene.canvas.width / 2)  - ((imageArme.width * scale) / 2);
 		bitmapArme.y = scene.canvas.height;
 	}
-	
-	this.afficherNombreBalles = function(){
-		scene.addChild(nbBalleActuel);
-	}
-	
-	this.tirer = function(cible){
-		// TODO : Faire tirer et si plus de balle faire recharger
-		if(nbBalleActuel < 1)
-			recharger();
 
-		console.log("Je tire");
+	this.getNbBallesActuel = function(){
+		return nbBallesActuel;
+	}
+
+	this.getNbBallesMax = function(){
+		return NOMBRE_BALLES_CHARGEUR;
 	}
 
 	this.getPosition = function(){
@@ -51,13 +51,23 @@ function Arme(scene){
 		bitmapArme.rotation = 90 + angle;
 	}
 	
+	this.tirer = function(){
+		nbBallesActuel--;
+	}
+
 	this.recharger = function(){
-		if(nbBalleActuel < NOMBRE_BALLES_CHARGEUR){
-			nbBalleActuel = NOMBRE_BALLES_CHARGEUR;
-			console.log("je recharge");
+		if(nbBallesActuel < NOMBRE_BALLES_CHARGEUR){
+			nbBallesActuel = NOMBRE_BALLES_CHARGEUR;
+			setTimeout(function(){
+				console.log("je recharge");
+			}, 3000);
 		}
 		else
 			console.log("deja six balles");
+	}
+
+	this.getNbBallesActuel = function(){
+		return nbBallesActuel;
 	}
     
     initialiser();

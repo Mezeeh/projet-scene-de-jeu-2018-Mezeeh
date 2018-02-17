@@ -4,20 +4,23 @@ function Mire(scene){
 	var bitmapMire = null;
 	var scale = 0.25;
 	var offset = {x : (177 * scale), y : (180 * scale)};
-	
-	this.estCharge = false;
+	var charge = false;
 	
 	function initialiser(){
 		imageMire = new Image();
 		imageMire.src = "decoration/illustration/mire.png";
 		bitmapMire = new createjs.Bitmap(imageMire);
 		bitmapMire.scaleX = bitmapMire.scaleY = scale;
-		bitmapMire.onload = noterFinChargement;
+		imageMire.onload = noterFinChargement;
 	}
 	
 	function noterFinChargement(){
-        mire.estCharge = true;
-    }
+        charge = true;
+	}
+	
+	this.estCharge = function(){
+		return charge;
+	}
     
     this.afficher = function(){
 		scene.addChild(bitmapMire);

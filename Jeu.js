@@ -29,8 +29,8 @@
 		mire = new Mire(scene);
 		canardListe = [];
 		deplacementCanardListe = [];
-		
-		for(i = 0; i < nombreCanards; i++)
+
+		for (i = 0; i < nombreCanards; i++)
 			canardListe[i] = new Canard(scene);
 
 		positionCanard = { x: 0, y: 0, z: 0 };
@@ -40,11 +40,11 @@
 		estEnRecharge = false;
 	}
 
-	function trierParProfondeur(){
+	function trierParProfondeur() {
 		// TODO : Trier les canards sur la scene selon leur scale
 	}
 
-	function initialiserPositionCanard(canard){
+	function initialiserPositionCanard(canard) {
 		//trierParProfondeur();
 		positionCanard.x = -300;
 		positionCanard.y = (Math.random() * 300) + 0;
@@ -57,31 +57,60 @@
 	}
 
 	function rafraichirJeu(evenement) {
-		for(i = 0; i < nombreCanards; i++)
-		{
+		for (i = 0; i < nombreCanards; i++) {
 			deplacementCanardListe[i] = evenement.delta / 1000 * 600 * (canardListe[i].getPerspective() * 1.5);
 			canardListe[i].bouger(deplacementCanardListe[i]);
-			if(canardListe[i].getPosition().x > scene.canvas.width)
+			if (canardListe[i].getPosition().x > scene.canvas.width)
 				initialiserPositionCanard(canardListe[i]);
+
+			// TODO : Faire une bien meilleur detection
+			if (balle.representationRectangle().intersects(canardListe[i].representationRectangle())){
+				balle.effacer();
+				canardListe[i].mourir();
+				//console.log("touche !");
+			}	
 		}
+
+		/* if (balle.getPosition().x > (scene.canvas.width + 10) || balle.getPosition().x < -10
+			|| balle.getPosition().y > (scene.canvas.height + 10) || balle.getPosition().y < -10) {
+			scene.removeChild(balle); // sarranger pour que la balle arrete de bouger lorsquelle sort du canvas
+			createjs.Tween.get({}).wait(200).call(function () {
+				createjs.Tween.removeTweens(balle);
+			});
+			console.log("balle retirer du canvas" + "\n" + balle.getPosition().y);
+			//balle.effacer(); 
+		}*/
+
 		scene.update(evenement);
 	}
 
 	function tirer(evenement) {
-		cible.x = evenement.stageX;
-		cible.y = evenement.stageY;
-		
-		if (estPretATirer) {
-			estPretATirer = false;
-			//arme.tirer(cible);
-			balle.afficher();
-			balle.tirer(cible);
-		
-			setTimeout(function () {
-				estPretATirer = true;
-			}, TEMPS_ENTRE_CHAQUE_TIRS);
+		document.onmousedown = function(e){			
+			if(e.which == 1){
+				cible.x = evenement.stageX;
+				cible.y = evenement.stageY;
+				
+				if (estPretATirer) {
+					estPretATirer = false;
+					if(arme.getNbBallesActuel() > 0){
+						console.log("Je tire pt");
+						arme.tirer();
+						balle.tirer(cible);
+					}
+					else
+						arme.recharger();
+					
+					setTimeout(function(){
+						balle.afficher();
+					}, 75);
+					
+					setTimeout(function () {
+						estPretATirer = true;
+					}, TEMPS_ENTRE_CHAQUE_TIRS);
+				}
+				scene.update(); 
+			}
 		}
-		scene.update();
 	}
 
 	function deplacerMire(evenement) {
@@ -91,13 +120,13 @@
 		mire.deplacer(positionMire);
 	}
 
-	function deplacerArme(evenement){
+	function deplacerArme(evenement) {
 		var angle = Math.atan2(scene.mouseY - arme.getPosition().y, scene.mouseX - arme.getPosition().x);
 		angle *= (180 / Math.PI);
 		arme.tourner(angle);
 	}
 
-	function pointer(evenement){
+	function pointer(evenement) {
 		deplacerMire(evenement);
 		deplacerArme(evenement);
 	}
@@ -107,12 +136,12 @@
 			var canardListeChargee = false;
 			var nbCanardCharge = 0;
 
-			for(i = 0; i < nombreCanards; i++){
-				if(canardListe[i].estCharge())
+			for (i = 0; i < nombreCanards; i++) {
+				if (canardListe[i].estCharge())
 					nbCanardCharge++;
 			}
-			if (nbCanardCharge == nombreCanards/*&& arme.estCharge && mechantCanard.estCharge*/) {
-				//initialiserCanevas();
+			
+			if ((nbCanardCharge == nombreCanards) && arme.estCharge() && mire.estCharge()/*&& mechantCanard.estCharge*/) {
 				arme.afficher();
 				//mechantCanard.afficher();
 				scene.on("stagemousedown", tirer);
@@ -120,7 +149,7 @@
 				document.onkeydown = gererCommandeClavier;
 				createjs.Ticker.addEventListener("tick", rafraichirJeu);
 
-				for(i = 0; i < nombreCanards; i++){
+				for (i = 0; i < nombreCanards; i++) {
 					faireApparaitreCanard(canardListe[i]);
 					initialiserPositionCanard(canardListe[i]);
 				}
@@ -143,7 +172,7 @@
 				break;
 
 			default:
-				console.log("defaut");
+				//console.log("defaut");
 				break;
 		}
 	}

@@ -4,11 +4,18 @@ function Canard(scene){
 	var charge = false;
 	var animationCanardVole;
 	var bitMapCanard = null;
+	var valeurEtat;
 	
+	var Etat = {
+		enMouvement : "EN MOUVEMENT",
+		enCollision : "EN COLLISION"
+	};
+
 	function initialiser(){
 		imageCanard = new Image();
 		imageCanard.src = "decoration/sprites/sprite-canard-volant.png";
 		imageCanard.onload = terminerChargement;
+		valeurEtat = Etat.enMouvement;
 	}
 	
 	function terminerChargement(){
@@ -37,12 +44,24 @@ function Canard(scene){
 	
 	this.bouger = function(distance){
 		// TODO : Faire bouger le/les Canard(s) d'une maniere random dans une zone donnee
-		animationCanardVole.x += distance;
+		if(valeurEtat = Etat.enMouvement)
+			animationCanardVole.x += distance;
 	}
 	
-	this.exploser = function(){
+	this.mourir = function(){
 		// TODO : animer une mort
-		scene.removeChild(animationCanardVole);
+		valeurEtat = Etat.enCollision;
+
+		var centreX = (animationCanardVole.getBounds().width * animationCanardVole.scaleX) / 2;
+		var centreY = (animationCanardVole.getBounds().height * animationCanardVole.scaleY) / 2;
+
+		createjs.Tween.get(animationCanardVole).to({regX: centreX, regY: centreY, y: scene.canvas.height, rotation: 1080}, 1000).wait(25).call(function(){ 
+			animationCanardVole.x = -300;
+			animationCanardVole.y = (Math.random() * 300) + 0;
+			animationCanardVole.scaleX = animationCanardVole.scaleY = (Math.random() * 0.5) + 0.1;
+		});
+
+		valeurEtat = Etat.enMouvement;
 	}
 	
 	this.setPosition = function(position){
@@ -59,6 +78,11 @@ function Canard(scene){
 	this.estCharge = function(){
 		return charge;
 	}
+
+	this.representationRectangle = function()
+    {
+      return animationCanardVole.getTransformedBounds();
+    }
 
     initialiser();
 }
