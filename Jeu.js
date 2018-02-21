@@ -25,6 +25,7 @@
 	var accueilVue;
 	var joueur;
 	var jeuVue;
+	var finVue;
 	var vueActive = null;
 
 	var ratioScene = { largeur: 1, hauteur: 1 };
@@ -35,6 +36,7 @@
 		joueur = new Joueur();
 		accueilVue = new AccueilVue(joueur);
 		jeuVue = new JeuVue(joueur);
+		finVue = new FinVue();
 		accueilVue.afficher();
 	}
 
@@ -59,11 +61,19 @@
 		}
 		else if(intructionNavigation.match(/^#gagnant$/))
 		{
+			if(vueActive instanceof JeuVue)
+				detruireJeu();
 
+			finVue.afficher("gagne", joueur.nom);
+			vueActive = finVue;
 		}
 		else if(intructionNavigation.match(/^#perdant$/))
 		{
+			if(vueActive instanceof JeuVue)
+				detruireJeu();
 
+			finVue.afficher("perdu", joueur.nom);
+			vueActive = finVue;
 		}
 	}
 
@@ -138,8 +148,7 @@
 				else
 					window.location = "#perdant";
 
-				
-				alert("Victorieux : " + gagne + "\nPointage : " + pointage);
+				//alert("Victorieux : " + gagne + "\nPointage : " + pointage);
 			}, TEMPS_DE_JEU);
 	}
 

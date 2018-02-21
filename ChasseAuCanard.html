@@ -65,6 +65,34 @@
 			right: 0;
 			z-index: 990;
 		}
+
+		#section-accueil, #section-fin{
+			margin: auto;
+    		width: 20%;
+			color : orange;
+			font-size: 32px;
+			text-align: center;
+		}
+
+		#section-accueil a, #section-fin a{
+			color : white;
+			text-decoration: none;
+		}
+
+		
+		#section-accueil a:hover, #section-fin a:hover{
+			text-decoration: underline;
+		}
+
+		h1{
+			font-size: 46px;
+			color: royalblue;
+		}
+
+		h2{
+			font-size: 38px;
+			color: palegreen;
+		}
 	</style>
 
 	<script src="createjs.min.js"></script>
@@ -74,8 +102,8 @@
 	<script type="text/plain" id="page-accueil">
 	
 		<header>
-			<h1>Jeu super hot</h1>
-			<h2>Le jeu le plus trippant du monde</h2>
+			<h1>Chasse au canard</h1>
+			<h2>La chasse est ouverte !</h2>
 		</header>
 	
 		<section id="section-accueil">
@@ -107,13 +135,37 @@
 		</div>
 	</script>
 
+	<script type="text/plain" id="page-fin">
+		<header>
+			<h1>Chasse au canard</h1>
+			<h2>La chasse est ouverte !</h2>
+		</header>
+		<section id="section-fin">
+			<div id="resultat">
+				<!-- {_NOM_} et {_MESSAGE_} sont des chaines à remplacer par programmation -->
+				<p>{NOM}</p>
+				<p class="message">{MESSAGE}</p>
+			</div>
+	
+			<div id="statistiques">
+	
+				<ul id="liste-gagnants">
+					<li>Gagnant 1</li>
+					<li>Gagnant 2</li>
+					<li>Gagnant 3</li>
+					<li>Gagnant 4</li>
+				</ul>
+			</div>
+			<a href="#accueil">Accueil</a>
+		</section>
+	  </script>
+
 	<script type="text/javascript" src="modele/Joueur.js"></script>
 	<script type="text/javascript" src="vue/AccueilVue.js"></script>
+	<script type="text/javascript" src="vue/FinVue.js"></script>
 	<script type="text/javascript" src="vue/JeuVue.js"></script>
 
 	<script src="ArrierePlan.js"></script>
-
-	
 	<script src="Arme.js"></script>
 	<script src="Balle.js"></script>
 	<script src="Canard.js"></script>
