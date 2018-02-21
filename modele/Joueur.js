@@ -1,0 +1,4 @@
+Joueur = function()
+{
+	this.nom;
+}

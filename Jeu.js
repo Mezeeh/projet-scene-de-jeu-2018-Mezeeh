@@ -2,7 +2,7 @@
 	var TOUCHE_ESPACE = 32;
 	var TEMPS_ENTRE_CHAQUE_TIRS = 1000;
 	var TEMPS_POUR_RECHARGER = 3000;
-	var TEMPS_DE_JEU = 60000;
+	var TEMPS_DE_JEU = 6000;
 
 	var dessin;
 	var scene;
@@ -22,13 +22,64 @@
 	var partieTerminee;
 	var gagne;
 
+	var accueilVue;
+	var joueur;
+	var jeuVue;
+	var vueActive = null;
+
 	var ratioScene = { largeur: 1, hauteur: 1 };
 	var dimentionScene = { largeur: 1, hauteur: 1 };
 
-	function initialiser() {
+	function initialiser(){
+		window.addEventListener("hashchange", interpreterEvenementsLocation);
+		joueur = new Joueur();
+		accueilVue = new AccueilVue(joueur);
+		jeuVue = new JeuVue(joueur);
+		accueilVue.afficher();
+	}
+
+	function interpreterEvenementsLocation(evenement)
+	{
+		//hash est la partie suivant le # dans l'url
+		var intructionNavigation = window.location.hash;
+		if(!intructionNavigation || intructionNavigation.match(/^#$/) || intructionNavigation.match(/^#accueil$/)) 
+		{
+			if(vueActive instanceof JeuVue)
+				detruireJeu();
+			
+			accueilVue.afficher();	
+			vueActive = accueilVue;
+		}
+		else if(intructionNavigation.match(/^#jeu$/))
+		{
+			jeuVue.afficher();
+			vueActive = jeuVue;
+			initialiserJeu();
+			//alert("toto");
+		}
+		else if(intructionNavigation.match(/^#gagnant$/))
+		{
+
+		}
+		else if(intructionNavigation.match(/^#perdant$/))
+		{
+
+		}
+	}
+
+	function detruireJeu(){
+		createjs.Ticker.removeEventListener("tick", rafraichirJeu);
+		document.onkeydown = null;
+		/* scene.off("stagemousedown");
+		scene.off("stagemousemove"); */
+		nbCanardCharge = 0;
+	}
+
+	function initialiserJeu() {
 		dessin = document.getElementById("dessin");
 		scene = new createjs.Stage(dessin);
 		createjs.Ticker.setFPS(25);
+		
 		mire = new Mire(scene);
 		arme = new Arme(scene);
 		balle = new Balle(scene);
@@ -58,7 +109,9 @@
 						nbCanardCharge++;
 				}
 				
-				if ((nbCanardCharge == nombreCanards) && arme.estCharge() && mire.estCharge()/*&& mechantCanard.estCharge*/) {
+				if ((nbCanardCharge == nombreCanards) && 
+					 arme.estCharge() && 
+					 mire.estCharge()) {
 					arme.afficher();
 					//mechantCanard.afficher();
 					scene.on("stagemousedown", tirer);
@@ -75,12 +128,17 @@
 				}
 	
 			}, 1);
-			
-			setTimeout(function(){
+
+			timer = setTimeout(function(){
 				partieTerminee = true;
-
+				clearTimeout(timer);
 				gagne = pointage >= (TEMPS_DE_JEU / 1000) * 40 / 100;
+				if(gagne)
+					window.location = "#gagnant";
+				else
+					window.location = "#perdant";
 
+				
 				alert("Victorieux : " + gagne + "\nPointage : " + pointage);
 			}, TEMPS_DE_JEU);
 	}

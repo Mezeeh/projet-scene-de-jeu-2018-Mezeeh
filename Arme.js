@@ -57,10 +57,11 @@ function Arme(scene){
 
 	this.recharger = function(){
 		if(nbBallesActuel < NOMBRE_BALLES_CHARGEUR){
-			nbBallesActuel = NOMBRE_BALLES_CHARGEUR;
+			console.log("je recharge..");
 			setTimeout(function(){
-				console.log("je recharge");
+				nbBallesActuel = NOMBRE_BALLES_CHARGEUR;
 			}, 3000);
+			console.log("recharge termine");
 		}
 		else
 			console.log("deja six balles");

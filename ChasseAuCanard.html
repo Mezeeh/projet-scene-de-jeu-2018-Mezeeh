@@ -66,19 +66,54 @@
 			z-index: 990;
 		}
 	</style>
+
+	<script src="createjs.min.js"></script>
 </head>
 
 <body>
-	<!--<dvi id="hud" width="1280" height="720">BLABAB</dvi>>-->
-	<div id="espace-jeu">
-		<canvas id="dessin" width="1280" height="720"></canvas>
-		<div id="hudBalles"></div>
-		<div id="hudPoints"></div>
-	</div>
+	<script type="text/plain" id="page-accueil">
+	
+		<header>
+			<h1>Jeu super hot</h1>
+			<h2>Le jeu le plus trippant du monde</h2>
+		</header>
+	
+		<section id="section-accueil">
+			<p>Veuillez inscrire votre nom puis cliquer sur jouer !</p>
+			<!-- En utilisant post on ne touche pas à l'URL-->
+			<form id="form-accueil" method="post">
+				<div>
+					<label for="nom">Votre nom de joueur</label>
+					<input type="text" id="nom" name="nom" >
+				</div>
+	
+				<!-- La navigation se fait par l'ajout de #jeu à l'URL
+						Il n'y a pas de rechargement de la page car c'est une technique de navigation
+						HTML dans une même page. -->
+				<a id="bouton-jouer" href="#jeu">Jouer</a>
+			</form>
+		</section>
+	
+		</script>
+
+	<script type="text/plain" id="page-jeu">
+		<div id="menu">
+			<a href="#accueil">Accueil</a>
+		</div>
+		<div id="espace-jeu">
+			<canvas id="dessin" width="1280" height="720"></canvas>
+			<div id="hudBalles">Toto</div>
+			<div id="hudPoints">Titi</div>
+		</div>
+	</script>
+
+	<script type="text/javascript" src="modele/Joueur.js"></script>
+	<script type="text/javascript" src="vue/AccueilVue.js"></script>
+	<script type="text/javascript" src="vue/JeuVue.js"></script>
 
 	<script src="ArrierePlan.js"></script>
 
-	<script src="createjs.min.js"></script>
+	
 	<script src="Arme.js"></script>
 	<script src="Balle.js"></script>
 	<script src="Canard.js"></script>
