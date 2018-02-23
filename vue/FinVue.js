@@ -1,6 +1,6 @@
-FinVue = function()
+FinVue = function(joueur)
 {
-  this.afficher = function(etat, nomJoueur)
+  this.afficher = function(etat)
   {
     var nouveauHTML = "";
     //{MESSAGE} est seulement une chaine à remplacer par une vraie valeur.
@@ -12,11 +12,13 @@ FinVue = function()
         //alert(nouveauHTML);
       break;        
       case "gagne":
+        //alert(joueur.points);
         nouveauHTML = FinVue.html.replace("{MESSAGE}","Vous avez gagné :)");
-      break;        
-    }
-    //{NOM} est seulement une chaine à remplacer par une vraie valeur.
-    nouveauHTML = nouveauHTML.replace("{NOM}",nomJoueur);
+        break;        
+      }
+      //{NOM} est seulement une chaine à remplacer par une vraie valeur.
+    nouveauHTML = nouveauHTML.replace("{POINTS}", joueur.points + " points");
+    nouveauHTML = nouveauHTML.replace("{NOM}", joueur.nom);
     document.getElementsByTagName("body")[0].innerHTML = nouveauHTML;
   }
 }

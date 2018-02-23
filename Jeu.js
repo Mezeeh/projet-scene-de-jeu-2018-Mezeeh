@@ -17,7 +17,6 @@
 	var estPretATirer;
 	var estEnRecharge;
 	var balle;
-	var pointage;
 	var nbBallesTirees;
 	var partieTerminee;
 	var gagne;
@@ -28,15 +27,12 @@
 	var finVue;
 	var vueActive = null;
 
-	var ratioScene = { largeur: 1, hauteur: 1 };
-	var dimentionScene = { largeur: 1, hauteur: 1 };
-
 	function initialiser(){
 		window.addEventListener("hashchange", interpreterEvenementsLocation);
 		joueur = new Joueur();
 		accueilVue = new AccueilVue(joueur);
 		jeuVue = new JeuVue(joueur);
-		finVue = new FinVue();
+		finVue = new FinVue(joueur);
 		accueilVue.afficher();
 	}
 
@@ -64,7 +60,7 @@
 			if(vueActive instanceof JeuVue)
 				detruireJeu();
 
-			finVue.afficher("gagne", joueur.nom);
+			finVue.afficher("gagne");
 			vueActive = finVue;
 		}
 		else if(intructionNavigation.match(/^#perdant$/))
@@ -72,7 +68,7 @@
 			if(vueActive instanceof JeuVue)
 				detruireJeu();
 
-			finVue.afficher("perdu", joueur.nom);
+			finVue.afficher("perdu");
 			vueActive = finVue;
 		}
 	}
@@ -93,8 +89,8 @@
 		mire = new Mire(scene);
 		arme = new Arme(scene);
 		balle = new Balle(scene);
-		pointage = 0;
 		nbBallesTirees = 0;
+		joueur.points = 0;
 		partieTerminee = false;
 		gagne = null;
 		canardListe = [];
@@ -142,7 +138,7 @@
 			timer = setTimeout(function(){
 				partieTerminee = true;
 				clearTimeout(timer);
-				gagne = pointage >= (TEMPS_DE_JEU / 1000) * 40 / 100;
+				gagne = joueur.points >= (TEMPS_DE_JEU / 1000) * 40 / 100;
 				if(gagne)
 					window.location = "#gagnant";
 				else
@@ -170,7 +166,7 @@
 
 	function rafraichirJeu(evenement) {
 		document.getElementById("hudBalles").innerHTML = arme.getNbBallesActuel() > 1 ? arme.getNbBallesActuel() + " balles" : arme.getNbBallesActuel() + " balle";
-		document.getElementById("hudPoints").innerHTML = pointage > 1 ? "Points : " + pointage : "Point : " + pointage; 
+		document.getElementById("hudPoints").innerHTML = joueur.points > 1 ? "Points : " + joueur.points : "Point : " + joueur.points; 
 
 		for (i = 0; i < nombreCanards; i++) {
 			deplacementCanardListe[i] = evenement.delta / 1000 * 600 * (canardListe[i].getPerspective() * 1.5);
@@ -181,7 +177,7 @@
 			// TODO : Faire une bien meilleur detection
 			if(balle.estEnMouvement()){
 				if (balle.representationRectangle().intersects(canardListe[i].representationRectangle())){
-					pointage++;
+					joueur.points++;
 					balle.effacer();
 					canardListe[i].mourir();
 				}	
