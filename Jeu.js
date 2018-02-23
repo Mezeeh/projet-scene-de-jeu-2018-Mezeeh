@@ -2,7 +2,7 @@
 	var TOUCHE_ESPACE = 32;
 	var TEMPS_ENTRE_CHAQUE_TIRS = 1000;
 	var TEMPS_POUR_RECHARGER = 3000;
-	var TEMPS_DE_JEU = 6000;
+	var TEMPS_DE_JEU = 60000;
 
 	var dessin;
 	var scene;
@@ -26,6 +26,7 @@
 	var jeuVue;
 	var finVue;
 	var vueActive = null;
+	var arrierePlan;
 
 	function initialiser(){
 		window.addEventListener("hashchange", interpreterEvenementsLocation);
@@ -89,6 +90,9 @@
 		mire = new Mire(scene);
 		arme = new Arme(scene);
 		balle = new Balle(scene);
+
+		arrierePlan = new ArrierePlan(scene);
+
 		nbBallesTirees = 0;
 		joueur.points = 0;
 		partieTerminee = false;
@@ -167,7 +171,9 @@
 	function rafraichirJeu(evenement) {
 		document.getElementById("hudBalles").innerHTML = arme.getNbBallesActuel() > 1 ? arme.getNbBallesActuel() + " balles" : arme.getNbBallesActuel() + " balle";
 		document.getElementById("hudPoints").innerHTML = joueur.points > 1 ? "Points : " + joueur.points : "Point : " + joueur.points; 
-
+		
+		arrierePlan.rafraichirAnimation(evenement);
+		
 		for (i = 0; i < nombreCanards; i++) {
 			deplacementCanardListe[i] = evenement.delta / 1000 * 600 * (canardListe[i].getPerspective() * 1.5);
 			canardListe[i].bouger(deplacementCanardListe[i]);
