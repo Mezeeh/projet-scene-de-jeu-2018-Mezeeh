@@ -28,12 +28,17 @@
 	var vueActive = null;
 	var arrierePlan;
 
+	var serveur;
+
 	function initialiser(){
 		window.addEventListener("hashchange", interpreterEvenementsLocation);
 		joueur = new Joueur();
 		accueilVue = new AccueilVue(joueur);
 		jeuVue = new JeuVue(joueur);
 		finVue = new FinVue(joueur);
+
+		serveur = new ConnexionSmartFox();
+
 		accueilVue.afficher();
 	}
 
