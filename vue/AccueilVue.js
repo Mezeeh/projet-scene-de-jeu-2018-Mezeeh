@@ -12,7 +12,7 @@ AccueilVue = function(joueur)
 	
 	function enregisterNom(evenemnet)
     {
-        joueur.nom = champNom.value;
+		joueur.nom = champNom.value;
     }
 
 	this.afficher = function()

@@ -37,7 +37,7 @@
 		jeuVue = new JeuVue(joueur);
 		finVue = new FinVue(joueur);
 
-		serveur = new ConnexionSmartFox();
+		serveur = new ConnexionSmartFox(joueur);
 
 		accueilVue.afficher();
 	}

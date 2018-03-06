@@ -1,4 +1,4 @@
-function ConnexionSmartFox(){
+function ConnexionSmartFox(jouer){
 
     var serveur;
     var configuration = {};
@@ -21,6 +21,14 @@ function ConnexionSmartFox(){
         ouvrirContactServeur();
     }
 
+    $(document).ready(function(){
+        $("#bouton-jouer").click(clickJouer);
+    });
+
+    function clickJouer(){
+        initialiser();
+    }
+
     function ouvrirContactServeur()
     {
         serveur.connect();    
@@ -36,7 +44,7 @@ function ConnexionSmartFox(){
     function ouvrirSession()
     {
         tracer("ouvrirSession()");
-        serveur.send(new SFS2X.Requests.System.LoginRequest("Nadine"));
+        serveur.send(new SFS2X.Requests.System.LoginRequest(jouer.nom));
     }
 
     function executerApresOuvertureSession(e)
@@ -87,6 +95,4 @@ function ConnexionSmartFox(){
         console.log(message);
         if(alerte) alert(message);
     }
-
-    initialiser();
 }
