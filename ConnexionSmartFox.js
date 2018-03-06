@@ -4,9 +4,9 @@ function ConnexionSmartFox(){
     var configuration = {};
     configuration.host = "127.0.0.1";
     configuration.port = 8888;
-    configuration.zone = "AlloMonde";
+    configuration.zone = "ChasseAuCanard";
     configuration.debug = false;
-    configuration.room = 'AlloGroupe';
+    configuration.room = 'Etang';
 
     function initialiser()
     {
