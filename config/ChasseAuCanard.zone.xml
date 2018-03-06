@@ -88,7 +88,7 @@
         </variable>
         <variable>
           <name>j1Nom</name>
-          <value>Joueur 1</value>
+          <value>&quot;Joueur 1&quot;</value>
           <type>STRING</type>
           <isPrivate>true</isPrivate>
           <isPersistent>false</isPersistent>
@@ -97,7 +97,7 @@
         </variable>
         <variable>
           <name>j2Nom</name>
-          <value>Joueur 2</value>
+          <value>&quot;Joueur 2&quot;</value>
           <type>STRING</type>
           <isPrivate>true</isPrivate>
           <isPersistent>false</isPersistent>
@@ -106,7 +106,7 @@
         </variable>
         <variable>
           <name>tempsRestant</name>
-          <value>00:00</value>
+          <value>&quot;00:00&quot;</value>
           <type>STRING</type>
           <isPrivate>true</isPrivate>
           <isPersistent>false</isPersistent>
@@ -167,11 +167,20 @@
           <isGlobal>false</isGlobal>
           <isHidden>false</isHidden>
         </variable>
+        <variable>
+          <name>isPartieTerminee</name>
+          <value>false</value>
+          <type>BOOL</type>
+          <isPrivate>true</isPrivate>
+          <isPersistent>false</isPersistent>
+          <isGlobal>false</isGlobal>
+          <isHidden>false</isHidden>
+        </variable>
       </roomVariables>
       <extension>
-        <name></name>
+        <name>ChasseAuCanard</name>
         <type>JAVA</type>
-        <file></file>
+        <file>ChasseAuCanardExtension</file>
         <propertiesFile></propertiesFile>
         <reloadMode>AUTO</reloadMode>
       </extension>
