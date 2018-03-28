@@ -1,4 +1,4 @@
-function ConnexionSmartFox(jouer){
+function ConnexionSmartFox(joueur){
 
     var serveur;
     var configuration = {};
@@ -12,13 +12,33 @@ function ConnexionSmartFox(jouer){
     {
         tracer('onload -> initialiser()', false);
         serveur = new SFS2X.SmartFox(configuration);
-        
         serveur.addEventListener(SFS2X.SFSEvent.CONNECTION, executerApresOuvertureContactServeur, this);
         serveur.addEventListener(SFS2X.SFSEvent.LOGIN, executerApresOuvertureSession, this);
-        serveur.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, executerApresEntreeSalon, this);
-        serveur.addEventListener(SFS2X.SFSEvent.ROOM_VARIABLES_UPDATE, executerApresVariableDeSalon, this);
+        //serveur.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, executerApresEntreeSalon, this);
         
+        serveur.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, surReponseExtension);
+
+        serveur.addEventListener(SFS2X.SFSEvent.ROOM_VARIABLES_UPDATE, recevoirNomJoueurs, this);
+        
+       
         ouvrirContactServeur();
+    }
+
+    function surReponseExtension(evt){
+        var parametres = evt.params;
+        var commande = evt.cmd;
+
+        tracer("Connexion etablit entre deux joueurs");
+
+        switch(commande){
+            case "ready":
+                commencerPartie(parametres);
+                break;
+        }
+    }
+
+    function commencerPartie(parametres){
+        tracer("Commencer la partie");
     }
 
     $(document).ready(function(){
@@ -31,7 +51,8 @@ function ConnexionSmartFox(jouer){
 
     function ouvrirContactServeur()
     {
-        serveur.connect();    
+        serveur.connect();
+        tracer("serveur.connect()");    
     }
 
     function executerApresOuvertureContactServeur(e)
@@ -44,7 +65,9 @@ function ConnexionSmartFox(jouer){
     function ouvrirSession()
     {
         tracer("ouvrirSession()");
-        serveur.send(new SFS2X.Requests.System.LoginRequest(jouer.nom));
+        //serveur.send(new SFS2X.Requests.System.LoginRequest(joueur.nom));
+        tracer(joueur.nom);
+        serveur.send(new SFS2X.LoginRequest(joueur.nom));
     }
 
     function executerApresOuvertureSession(e)
@@ -54,14 +77,17 @@ function ConnexionSmartFox(jouer){
         entrerSalon();
     }
 
-    function entrerSalon()
+    function entrerSalon(e)
     {
         tracer('entrerSalon()');
-        estEnvoye = serveur.send(new SFS2X.Requests.System.JoinRoomRequest(configuration.room));
+                                //new SFS2X.Requests.System.JoinRoomRequest(configuration.room)
+        estEnvoye = serveur.send(new SFS2X.JoinRoomRequest(configuration.room));
         tracer('demande d\'entrer dans le salon effectuee');
+        tracer("serveur.lastJoinedRoom : " + serveur.lastJoinedRoom);
+        serveur.send(new SFS2X.ExtensionRequest("ready", null/* , "etang"/* serveur.lastJoinedRoom */));
     }
 
-    function executerApresEntreeSalon(e)
+    /* function executerApresEntreeSalon(e)
     {
         tracer('executerApresEntreeSalon()');
         tracer('Entree dans le salon ' + e.room + ' reussie')
@@ -73,11 +99,11 @@ function ConnexionSmartFox(jouer){
         tracer('envoyerSalutation()');
         var listeVariables = [];
         //listeVariables.push(new SFS2X.Entities.Variables.SFSRoomVariable('test','autre valeur'));
-        listeVariables.push(new SFS2X.Entities.Variables.SFSRoomVariable('salutation','coucou'));
+        listeVariables.push(new SFS2X.Entities.Variables.SFSRoomVariable('j1Nom', 'toto'));
 
         estEnvoyee = serveur.send(new SFS2X.Requests.System.SetRoomVariablesRequest(listeVariables));
         tracer('la nouvelle valeur est envoyee ' + estEnvoyee);
-    }
+    } */
 
     function executerApresVariableDeSalon(e)
     {
@@ -88,6 +114,13 @@ function ConnexionSmartFox(jouer){
             tracer('salutation == ' + e.room.getVariable('salutation').value, true);
         }
         
+    }
+
+    function recevoirNomJoueurs(e){
+        if(e.changedVars.indexOf('j1Nom') != -1)
+            tracer(e.room.getVariable('j1Nom').value, true);
+        else
+            tracer("nom j1 non dispo");
     }
 
     function tracer(message, alerte)
