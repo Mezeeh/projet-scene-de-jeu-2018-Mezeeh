@@ -56,6 +56,7 @@
 		}
 		else if(intructionNavigation.match(/^#jeu$/))
 		{
+			serveur.clickJouer();
 			jeuVue.afficher();
 			vueActive = jeuVue;
 			initialiserJeu();
@@ -222,7 +223,6 @@
 						estPretATirer = true;
 					}, TEMPS_ENTRE_CHAQUE_TIRS);
 				}
-				//scene.update(); 
 			}
 		}
 	}

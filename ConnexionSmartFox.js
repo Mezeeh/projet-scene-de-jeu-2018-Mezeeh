@@ -18,7 +18,7 @@ function ConnexionSmartFox(joueur){
         
         serveur.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, surReponseExtension);
 
-        serveur.addEventListener(SFS2X.SFSEvent.ROOM_VARIABLES_UPDATE, recevoirNomJoueurs, this);
+        serveur.addEventListener(SFS2X.SFSEvent.ROOM_VARIABLES_UPDATE, recevoirVariables, this);
         
        
         ouvrirContactServeur();
@@ -41,11 +41,11 @@ function ConnexionSmartFox(joueur){
         tracer("Commencer la partie");
     }
 
-    $(document).ready(function(){
+    /* $(document).ready(function(){
         $("#bouton-jouer").click(clickJouer);
-    });
+    }); */
 
-    function clickJouer(){
+    this.clickJouer = function(){
         initialiser();
     }
 
@@ -116,11 +116,14 @@ function ConnexionSmartFox(joueur){
         
     }
 
-    function recevoirNomJoueurs(e){
-        if(e.changedVars.indexOf('j1Nom') != -1)
-            tracer(e.room.getVariable('j1Nom').value, true);
-        else
-            tracer("nom j1 non dispo");
+    function recevoirVariables(e){
+        if(document.getElementById("hudNomJ1").innerHTML = "Nom joueur 1")
+            document.getElementById("hudNomJ1").innerHTML = e.room.getVariable('j1Nom').value;
+        if(document.getElementById("hudNomJ2").innerHTML = "Nom joueur 2")
+            document.getElementById("hudNomJ2").innerHTML = e.room.getVariable('j2Nom').value;
+
+        document.getElementById("hudPointsJ1").innerHTML = e.room.getVariable('j1Pointage').value;
+        document.getElementById("hudPointsJ2").innerHTML = e.room.getVariable('j2Pointage').value;
     }
 
     function tracer(message, alerte)
