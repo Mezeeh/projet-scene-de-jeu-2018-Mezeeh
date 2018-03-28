@@ -39,7 +39,7 @@
 			z-index: 999;
 		}
 
-		#hudPoints {
+		#hudPointsJ1 {
 			font-size: 32px;
 			color:darkred;
 			padding: 0;
@@ -48,8 +48,50 @@
 			width: auto;
 			height: 32px;
 			position:absolute;
-			bottom: 0;
+			top: 35px;
 			left: 0;
+			z-index: 999;
+		}
+
+		#hudPointsJ2 {
+			font-size: 32px;
+			color:darkred;
+			padding: 0;
+			margin: auto;
+			display: block;
+			width: auto;
+			height: 32px;
+			position:absolute;
+			top: 35px;
+			right: 0;
+			z-index: 999;
+		}
+
+		#hudNomJ1 {
+			font-size: 32px;
+			color:darkred;
+			padding: 0;
+			margin: auto;
+			display: block;
+			width: auto;
+			height: 32px;
+			position:absolute;
+			top: 0;
+			left: 0;
+			z-index: 999;
+		}
+
+		#hudNomJ2 {
+			font-size: 32px;
+			color:darkred;
+			padding: 0;
+			margin: auto;
+			display: block;
+			width: auto;
+			height: 32px;
+			position:absolute;
+			top: 0;
+			right: 0;
 			z-index: 999;
 		}
 
@@ -132,7 +174,10 @@
 		<div id="espace-jeu">
 			<canvas id="dessin" width="1280" height="720"></canvas>
 			<div id="hudBalles">Toto</div>
-			<div id="hudPoints">Titi</div>
+			<div id="hudPointsJ1">Points Joueur 1</div>
+			<div id="hudPointsJ2">Points Joueur 2</div>
+			<div id="hudNomJ1">Nom joueur 1</div>
+			<div id="hudNomJ2">Nom joueur 2</div>
 		</div>
 	</script>
 

@@ -175,7 +175,7 @@
 
 	function rafraichirJeu(evenement) {
 		document.getElementById("hudBalles").innerHTML = arme.getNbBallesActuel() > 1 ? arme.getNbBallesActuel() + " balles" : arme.getNbBallesActuel() + " balle";
-		document.getElementById("hudPoints").innerHTML = joueur.points > 1 ? "Points : " + joueur.points : "Point : " + joueur.points; 
+		//document.getElementById("hudPointsJ1").innerHTML = joueur.points > 1 ? "Points : " + joueur.points : "Point : " + joueur.points; 
 		
 		arrierePlan.rafraichirAnimation(evenement);
 		
