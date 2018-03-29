@@ -1,4 +1,4 @@
-function ConnexionSmartFox(joueur){
+function ConnexionSmartFox(joueur, gererVariableRecue){
 
     var serveur;
     var configuration = {};
@@ -8,19 +8,21 @@ function ConnexionSmartFox(joueur){
     configuration.debug = false;
     configuration.room = 'Etang';
 
+    var estPret = false;
+
     function initialiser()
     {
         tracer('onload -> initialiser()', false);
         serveur = new SFS2X.SmartFox(configuration);
+
         serveur.addEventListener(SFS2X.SFSEvent.CONNECTION, executerApresOuvertureContactServeur, this);
         serveur.addEventListener(SFS2X.SFSEvent.LOGIN, executerApresOuvertureSession, this);
         //serveur.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, executerApresEntreeSalon, this);
-        
+        serveur.addEventListener(SFS2X.SFSEvent.ROOM_VARIABLES_UPDATE, recevoirVariables, this);        
         serveur.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, surReponseExtension);
 
-        serveur.addEventListener(SFS2X.SFSEvent.ROOM_VARIABLES_UPDATE, recevoirVariables, this);
         
-       
+
         ouvrirContactServeur();
     }
 
@@ -28,7 +30,7 @@ function ConnexionSmartFox(joueur){
         var parametres = evt.params;
         var commande = evt.cmd;
 
-        tracer("Connexion etablit entre deux joueurs");
+        console.log("> Received Extension Response: " + commande);
 
         switch(commande){
             case "ready":
@@ -37,8 +39,18 @@ function ConnexionSmartFox(joueur){
         }
     }
 
+    this.getEstPret = function(){
+        return this.estPret;
+    }
+
     function commencerPartie(parametres){
-        tracer("Commencer la partie");
+        estPret = true;
+        console.log("commencerPartie - estPret = " + estPret);
+    }
+
+    this.getEstPret = function(){
+        console.log("getEstPret : " + estPret);
+        return estPret;
     }
 
     /* $(document).ready(function(){
@@ -117,14 +129,24 @@ function ConnexionSmartFox(joueur){
     }
 
     function recevoirVariables(e){
-        if(document.getElementById("hudNomJ1").innerHTML = "Nom joueur 1")
-            document.getElementById("hudNomJ1").innerHTML = e.room.getVariable('j1Nom').value;
-        if(document.getElementById("hudNomJ2").innerHTML = "Nom joueur 2")
-            document.getElementById("hudNomJ2").innerHTML = e.room.getVariable('j2Nom').value;
+        console.log("recevoirVariables");
+        variableRecue = {j1Nom : e.room.getVariable('j1Nom').value,
+                         j2Nom : e.room.getVariable('j2Nom').value,
+                         j1Pointage : e.room.getVariable('j1Pointage').value,
+                         j2Pointage : e.room.getVariable('j2Pointage').value};
+        gererVariableRecue(variableRecue);
+        
+        /* if(document.getElementById("hudNomJ1")){
 
-        document.getElementById("hudPointsJ1").innerHTML = e.room.getVariable('j1Pointage').value;
-        document.getElementById("hudPointsJ2").innerHTML = e.room.getVariable('j2Pointage').value;
-    }
+            if(document.getElementById("hudNomJ1").innerHTML = "Nom joueur 1")
+            document.getElementById("hudNomJ1").innerHTML = e.room.getVariable('j1Nom').value;
+            if(document.getElementById("hudNomJ2").innerHTML = "Nom joueur 2")
+            document.getElementById("hudNomJ2").innerHTML = e.room.getVariable('j2Nom').value;
+            
+            document.getElementById("hudPointsJ1").innerHTML = e.room.getVariable('j1Pointage').value;
+            document.getElementById("hudPointsJ2").innerHTML = e.room.getVariable('j2Pointage').value;
+        }*/
+    } 
 
     function tracer(message, alerte)
     {

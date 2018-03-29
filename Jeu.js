@@ -30,6 +30,13 @@
 
 	var serveur;
 
+	var attenteVue;
+
+	var derniereVariableRecu = {j1Nom : "",
+									j2Nom : "",
+									j1Pointage : "",
+									j2Pointage : ""};;
+
 	function initialiser(){
 		window.addEventListener("hashchange", interpreterEvenementsLocation);
 		joueur = new Joueur();
@@ -37,9 +44,17 @@
 		jeuVue = new JeuVue(joueur);
 		finVue = new FinVue(joueur);
 
-		serveur = new ConnexionSmartFox(joueur);
+		attenteVue = new AttenteVue();
+
+		serveur = new ConnexionSmartFox(joueur, gererVariableRecue);
 
 		accueilVue.afficher();
+	}
+
+	function gererVariableRecue(variableRecue){
+		derniereVariableRecu = variableRecue;
+		console.log("gererVariableRecue");
+		console.log("vueActive instanceof JeuVue " + vueActive instanceof JeuVue);
 	}
 
 	function interpreterEvenementsLocation(evenement)
@@ -54,10 +69,27 @@
 			accueilVue.afficher();	
 			vueActive = accueilVue;
 		}
+		else if(intructionNavigation.match(/^#attente$/)){
+			serveur.clickJouer();
+
+			intervalAttenteDebutPartie = setInterval(
+				function(){
+					if(!(vueActive instanceof AttenteVue)){
+						console.log("En attente du second joueur...");
+						attenteVue.afficher();
+						vueActive = attenteVue;
+					}
+					if(serveur.getEstPret()){
+						clearInterval(intervalAttenteDebutPartie);
+						window.location = "#jeu";
+					}
+				}
+			, 1);
+		}
 		else if(intructionNavigation.match(/^#jeu$/))
 		{
-			serveur.clickJouer();
 			jeuVue.afficher();
+			jeuVue.raffraichirHUD(derniereVariableRecu);
 			vueActive = jeuVue;
 			initialiserJeu();
 			//alert("toto");

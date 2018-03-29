@@ -127,6 +127,16 @@
 			text-decoration: underline;
 		}
 
+		#section-attente{
+			background-color: blueviolet;
+			display: block;
+			width: 50%;
+			margin: 0 auto;
+			margin-top: 340px;
+			font-size: 40px;
+			text-align: center;
+		}
+
 		h1{
 			font-size: 46px;
 			color: royalblue;
@@ -161,11 +171,22 @@
 				<!-- La navigation se fait par l'ajout de #jeu à l'URL
 						Il n'y a pas de rechargement de la page car c'est une technique de navigation
 						HTML dans une même page. -->
-				<a id="bouton-jouer" href="#jeu">Jouer</a>
+				<a id="bouton-jouer" href="#attente">Jouer</a>
 			</form>
 		</section>
 	
-		</script>
+	</script>
+
+	<script type="text/plain" id="page-attente">
+		<div id="menu">
+				<a href="#accueil">Accueil</a>
+		</div>
+		<div id="section-attente">
+			<div>
+				En attente du second joueur...
+			</div>
+		</div>
+	</script>
 
 	<script type="text/plain" id="page-jeu">
 		<div id="menu">
@@ -211,6 +232,7 @@
 	<script type="text/javascript" src="vue/AccueilVue.js"></script>
 	<script type="text/javascript" src="vue/FinVue.js"></script>
 	<script type="text/javascript" src="vue/JeuVue.js"></script>
+	<script type="text/javascript" src="vue/AttenteVue.js"></script>
 
 	<script src="lib/jquery-1.7.2.min.js"></script>
 	
