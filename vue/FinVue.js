@@ -15,7 +15,10 @@ FinVue = function(joueur)
         //alert(joueur.points);
         nouveauHTML = FinVue.html.replace("{MESSAGE}","Vous avez gagné :)");
         break;        
-      }
+      case "egalite":
+        nouveauHTML = FinVue.html.replace("{MESSAGE}","Match nul :O");
+        break;
+    }
       //{NOM} est seulement une chaine à remplacer par une vraie valeur.
     nouveauHTML = nouveauHTML.replace("{POINTS}", joueur.points + " points");
     nouveauHTML = nouveauHTML.replace("{NOM}", joueur.nom);

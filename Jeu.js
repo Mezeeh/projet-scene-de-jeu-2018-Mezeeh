@@ -110,6 +110,14 @@
 			finVue.afficher("perdu");
 			vueActive = finVue;
 		}
+		else if(intructionNavigation.match(/^#egalite$/))
+		{
+			if(vueActive instanceof JeuVue)
+				detruireJeu();
+
+			finVue.afficher("egalite");
+			vueActive = finVue;
+		}
 	}
 
 	function detruireJeu(){
@@ -177,7 +185,7 @@
 	
 			}, 1);
 
-			timer = setTimeout(function(){
+			/* timer = setTimeout(function(){
 				partieTerminee = true;
 				clearTimeout(timer);
 				gagne = joueur.points >= (TEMPS_DE_JEU / 1000) * 40 / 100;
@@ -185,9 +193,24 @@
 					window.location = "#gagnant";
 				else
 					window.location = "#perdant";
+			}, TEMPS_DE_JEU); */
 
-				//alert("Victorieux : " + gagne + "\nPointage : " + pointage);
-			}, TEMPS_DE_JEU);
+			intvl = setInterval(function(){
+				if(serveur.getEstTerminee()){
+					finirPartie(serveur.getGagnant());
+					clearInterval(intvl);
+				}
+			}, 1);
+	}
+
+	function finirPartie(gagnant){
+		//console.log("finirPartie");
+		if(gagnant == joueur.nom)
+			window.location = "#gagnant";
+		else if(gagnant == "_null_")
+			window.location = "#egalite";
+		else
+			window.location = "#perdant";
 	}
 
 	function trierParProfondeur() {

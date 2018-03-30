@@ -9,6 +9,7 @@ function ConnexionSmartFox(joueur, gererVariableRecue){
     configuration.room = 'Etang';
 
     var estPret = false;
+    var estTerminee = false;
 
     function initialiser()
     {
@@ -34,28 +35,41 @@ function ConnexionSmartFox(joueur, gererVariableRecue){
 
         switch(commande){
             case "ready":
-                commencerPartie(parametres);
+                commencerPartie();
+                break;
+            case "terminer":
+                console.log("recu terminer par le serveur");
+                terminerPartie(parametres);
                 break;
         }
     }
 
-    this.getEstPret = function(){
-        return this.estPret;
-    }
-
-    function commencerPartie(parametres){
+    function commencerPartie(){
         estPret = true;
-        console.log("commencerPartie - estPret = " + estPret);
+        //console.log("commencerPartie - estPret = " + estPret);
+    }
+
+    var gagnant;
+    function terminerPartie(parametres){
+        estTerminee = true;
+        gagnant = parametres.get("gagnant");
+        //console.log("La partie est terminée = " + estTerminee);
+        console.log("Le gagnant est = " + gagnant);
     }
 
     this.getEstPret = function(){
-        console.log("getEstPret : " + estPret);
+        //console.log("getEstPret : " + estPret);
         return estPret;
     }
 
-    /* $(document).ready(function(){
-        $("#bouton-jouer").click(clickJouer);
-    }); */
+    this.getEstTerminee = function(){
+        //console.log("getEstTerminee : " + estTerminee);
+        return estTerminee;
+    }
+
+    this.getGagnant = function(){
+        return gagnant;
+    }
 
     this.clickJouer = function(){
         initialiser();
@@ -99,24 +113,6 @@ function ConnexionSmartFox(joueur, gererVariableRecue){
         serveur.send(new SFS2X.ExtensionRequest("ready", null/* , "etang"/* serveur.lastJoinedRoom */));
     }
 
-    /* function executerApresEntreeSalon(e)
-    {
-        tracer('executerApresEntreeSalon()');
-        tracer('Entree dans le salon ' + e.room + ' reussie')
-        envoyerSalutation();
-    }
-
-    function envoyerSalutation()
-    {
-        tracer('envoyerSalutation()');
-        var listeVariables = [];
-        //listeVariables.push(new SFS2X.Entities.Variables.SFSRoomVariable('test','autre valeur'));
-        listeVariables.push(new SFS2X.Entities.Variables.SFSRoomVariable('j1Nom', 'toto'));
-
-        estEnvoyee = serveur.send(new SFS2X.Requests.System.SetRoomVariablesRequest(listeVariables));
-        tracer('la nouvelle valeur est envoyee ' + estEnvoyee);
-    } */
-
     function executerApresVariableDeSalon(e)
     {
         tracer('executerApresVariableDeSalon()');
@@ -135,17 +131,6 @@ function ConnexionSmartFox(joueur, gererVariableRecue){
                          j1Pointage : e.room.getVariable('j1Pointage').value,
                          j2Pointage : e.room.getVariable('j2Pointage').value};
         gererVariableRecue(variableRecue);
-        
-        /* if(document.getElementById("hudNomJ1")){
-
-            if(document.getElementById("hudNomJ1").innerHTML = "Nom joueur 1")
-            document.getElementById("hudNomJ1").innerHTML = e.room.getVariable('j1Nom').value;
-            if(document.getElementById("hudNomJ2").innerHTML = "Nom joueur 2")
-            document.getElementById("hudNomJ2").innerHTML = e.room.getVariable('j2Nom').value;
-            
-            document.getElementById("hudPointsJ1").innerHTML = e.room.getVariable('j1Pointage').value;
-            document.getElementById("hudPointsJ2").innerHTML = e.room.getVariable('j2Pointage').value;
-        }*/
     } 
 
     function tracer(message, alerte)
