@@ -41,7 +41,47 @@ function ConnexionSmartFox(joueur, gererVariableRecue){
                 console.log("recu terminer par le serveur");
                 terminerPartie(parametres);
                 break;
+            case "positionCanards":
+                console.log("recu positionCanards");
+                placerCanards(parametres);
+                break;
         }
+    }
+
+    var positionX;
+    var positionY = [];
+    var positionZ = [];
+    var nombreCanards;
+    function placerCanards(parametres){
+        positionX = parametres.get("positionX");
+        positionY = parametres.get("positionY");
+        positionZ = parametres.get("positionZ");
+
+        nombreCanards = parametres.get("nombreCanards");
+        //console.log("nombreCanards = " + nombreCanards);
+
+        /* console.log("positionX = " + positionX);
+        for(var i = 0; i < positionY.length; i++){
+            console.log("positionY = " + positionY[i]);
+            console.log("positionZ = " + positionZ[i]);
+        } */
+    }
+
+    this.getNombreCanards = function(){
+        return nombreCanards;
+    }
+
+    this.getPositionXCanards = function(){
+        console.log("getPositionXCanards")
+        return positionX;
+    }
+
+    this.getPositionYCanards = function(indexCanards){
+        return positionY[indexCanards];
+    }
+
+    this.getPositionZCanards = function(indexCanards){
+        return positionZ[indexCanards];
     }
 
     function commencerPartie(){

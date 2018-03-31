@@ -8,7 +8,7 @@
 	var scene;
 	var arme;
 	var canardListe;
-	var nombreCanards = 12;
+	var nombreCanards;
 	var deplacementCanardListe;
 	var mire;
 	var positionCanard;
@@ -129,6 +129,8 @@
 	}
 
 	function initialiserJeu() {
+		nombreCanards = serveur.getNombreCanards();
+
 		dessin = document.getElementById("dessin");
 		scene = new createjs.Stage(dessin);
 		createjs.Ticker.setFPS(25);
@@ -177,7 +179,8 @@
 	
 					for (i = 0; i < nombreCanards; i++) {
 						faireApparaitreCanard(canardListe[i]);
-						initialiserPositionCanard(canardListe[i]);
+						//initialiserPositionCanard(canardListe[i]);
+						initialiserPositionCanard(i);
 					}
 					mire.afficher();
 					clearInterval(interval);
@@ -217,12 +220,13 @@
 		// TODO : Trier les canards sur la scene selon leur scale
 	}
 
-	function initialiserPositionCanard(canard) {
+	function initialiserPositionCanard(index) {
 		//trierParProfondeur();
-		positionCanard.x = -300;
-		positionCanard.y = (Math.random() * 300) + 0;
-		positionCanard.z = (Math.random() * 0.5) + 0.1;
-		canard.setPosition(positionCanard);
+		positionCanard.x = serveur.getPositionXCanards();
+		positionCanard.y = serveur.getPositionYCanards(index);
+		positionCanard.z = serveur.getPositionZCanards(index);
+		//canard.setPosition(positionCanard);
+		canardListe[index].setPosition(positionCanard);
 	}
 
 	function faireApparaitreCanard(canard) {
@@ -239,7 +243,8 @@
 			deplacementCanardListe[i] = evenement.delta / 1000 * 600 * (canardListe[i].getPerspective() * 1.5);
 			canardListe[i].bouger(deplacementCanardListe[i]);
 			if (canardListe[i].getPosition().x > scene.canvas.width)
-				initialiserPositionCanard(canardListe[i]);
+				initialiserPositionCanard(i);
+				//initialiserPositionCanard(canardListe[i]);
 
 			// TODO : Faire une bien meilleur detection
 			if(balle.estEnMouvement()){
