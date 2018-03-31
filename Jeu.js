@@ -250,6 +250,7 @@
 			if(balle.estEnMouvement()){
 				if (balle.representationRectangle().intersects(canardListe[i].representationRectangle())){
 					joueur.points++;
+					serveur.augmenterPoints();
 					balle.effacer();
 					canardListe[i].mourir();
 				}	

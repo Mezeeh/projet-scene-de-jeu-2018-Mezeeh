@@ -35,7 +35,7 @@ function ConnexionSmartFox(joueur, gererVariableRecue){
 
         switch(commande){
             case "ready":
-                commencerPartie();
+                commencerPartie(parametres);
                 break;
             case "terminer":
                 console.log("recu terminer par le serveur");
@@ -84,8 +84,10 @@ function ConnexionSmartFox(joueur, gererVariableRecue){
         return positionZ[indexCanards];
     }
 
-    function commencerPartie(){
+    var premierJoueur;
+    function commencerPartie(parametres){
         estPret = true;
+        premierJoueur = parametres.get("j1Nom") == joueur.nom ? true : false;
         //console.log("commencerPartie - estPret = " + estPret);
     }
 
@@ -113,6 +115,13 @@ function ConnexionSmartFox(joueur, gererVariableRecue){
 
     this.clickJouer = function(){
         initialiser();
+    }
+
+    this.augmenterPoints = function(){
+        var params = new SFS2X.SFSObject();
+        params.putUtfString("nomJoueur", joueur.nom);
+        params.putInt("pointage", joueur.points);
+        serveur.send(new SFS2X.ExtensionRequest("mettreAJourPoints", params));
     }
 
     function ouvrirContactServeur()
