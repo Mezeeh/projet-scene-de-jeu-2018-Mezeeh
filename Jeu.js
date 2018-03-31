@@ -53,8 +53,8 @@
 
 	function gererVariableRecue(variableRecue){
 		derniereVariableRecu = variableRecue;
-		console.log("gererVariableRecue");
-		console.log("vueActive instanceof JeuVue " + vueActive instanceof JeuVue);
+		/* console.log("gererVariableRecue");
+		console.log("vueActive instanceof JeuVue " + vueActive instanceof JeuVue); */
 	}
 
 	function interpreterEvenementsLocation(evenement)
@@ -238,6 +238,7 @@
 		//document.getElementById("hudPointsJ1").innerHTML = joueur.points > 1 ? "Points : " + joueur.points : "Point : " + joueur.points; 
 		
 		arrierePlan.rafraichirAnimation(evenement);
+		jeuVue.raffraichirHUD(derniereVariableRecu);
 		
 		for (i = 0; i < nombreCanards; i++) {
 			deplacementCanardListe[i] = evenement.delta / 1000 * 600 * (canardListe[i].getPerspective() * 1.5);
